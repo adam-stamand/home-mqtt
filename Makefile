@@ -1,11 +1,3 @@
-root := $(dir $(abspath $(lastword $(MAKEFILE_LIST))/../..))
-
-repository := us.gcr.io/loft-orbital-picu
-image := picu-build
-container := ${image}-$(shell whoami)
-version := 0.5.5
-
-
 .PHONY: help build start stop push
 
 help:
@@ -13,15 +5,13 @@ help:
 	@echo "... help"
 	@echo "... build"
 	@echo "... start"
-	@echo "... stop"
-	@echo "... push"
 
 build-client:
 	@echo building ${CLIENT}
 	@docker build                               \
 		--tag=${CLIENT} 						\
 		--build-arg client=${CLIENT}      		\
-		--file=docker/${CLIENT}.Dockerfile  \
+		--file=docker/Dockerfile  \
 		.
 
 start-client:
@@ -32,6 +22,11 @@ start-client:
 		--network mqtt						\
 		${CLIENT}
 
+run-client:
+	@echo running ${CLIENT}
+	@python3 main.py
+
+
 start-broker:
 	@echo starting mosquitto
 	@docker run                             \
@@ -41,10 +36,3 @@ start-broker:
 		-p 1883:1883						\
 		eclipse-mosquitto
 
-stop:
-	@echo stopping ${container}
-	@docker container stop ${container}
-
-push:
-	@echo pushing ${repository}/${image}:${version}
-	@docker push "${repository}/${image}:${version}"

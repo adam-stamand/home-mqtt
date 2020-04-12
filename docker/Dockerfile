@@ -7,9 +7,12 @@ ARG client
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY src/clients/common common/
-COPY src/clients/${client} ${client}/
+COPY src src
+COPY util util
+COPY conf conf
+COPY main.py main.py
 
 
-RUN ln -s ${client}/main.py entrypoint
+
+RUN ln -s main.py entrypoint
 CMD [ "python", "entrypoint" ]

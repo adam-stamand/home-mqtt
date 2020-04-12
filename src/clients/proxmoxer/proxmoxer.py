@@ -1,11 +1,9 @@
 import sys
-sys.path.append(".")
-sys.path.append("../../util")
 from proxmoxer import ProxmoxAPI
-from common.MQTTClient import MQQTClient as MC
 import time
+from src.clients.common.MQTTClient import MQQTClient as MC
+import util.credentialCrypt as CC
 import yaml
-import credentialCrypt as CC
 from pathlib import Path
 
 def connect_cb(client, userdata, flags, rc):
@@ -63,8 +61,7 @@ def Loop(proxmox, client):
         except Exception as e:
             print(e)
 
-
-if __name__ == "__main__":
+def main():
     proxmox = ConnectProxmox()
     mqttClient = ConnectMQTT()
     Loop(proxmox, mqttClient)
